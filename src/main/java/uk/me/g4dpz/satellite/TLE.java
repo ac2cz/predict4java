@@ -162,23 +162,23 @@ public class TLE implements Serializable {
         name = tle[0].trim();
         setnum = Integer.parseInt(StringUtils.strip(tle[1].substring(64, 68)));
         year = Integer.parseInt(StringUtils.strip(tle[1].substring(18, 20)));
-        refepoch = Double.parseDouble(tle[1].substring(20, 32));
-        incl = Double.parseDouble(tle[2].substring(8, 16));
-        raan = Double.parseDouble(tle[2].substring(17, 25));
-        eccn = 1.0e-07 * Double.parseDouble(tle[2].substring(26, 33));
-        argper = Double.parseDouble(tle[2].substring(34, 42));
-        meanan = Double.parseDouble(tle[2].substring(43, 51));
-        meanmo = Double.parseDouble(tle[2].substring(52, 63));
-        drag = Double.parseDouble(tle[1].substring(33, 43));
+        refepoch = parseDouble(tle[1].substring(20, 32));
+        incl = parseDouble(tle[2].substring(8, 16));
+        raan = parseDouble(tle[2].substring(17, 25));
+        eccn = 1.0e-07 * parseDouble(tle[2].substring(26, 33));
+        argper = parseDouble(tle[2].substring(34, 42));
+        meanan = parseDouble(tle[2].substring(43, 51));
+        meanmo = parseDouble(tle[2].substring(52, 63));
+        drag = parseDouble(tle[1].substring(33, 43));
 
-        double tempnum = 1.0e-5 * Double.parseDouble(tle[1].substring(44, 50));
+        double tempnum = 1.0e-5 * parseDouble(tle[1].substring(44, 50));
         nddot6 = tempnum
-                / Math.pow(10.0, Double.parseDouble(tle[1].substring(51, 52)));
+                / Math.pow(10.0, parseDouble(tle[1].substring(51, 52)));
 
-        tempnum = 1.0e-5 * Double.parseDouble(tle[1].substring(53, 59));
+        tempnum = 1.0e-5 * parseDouble(tle[1].substring(53, 59));
 
         bstar = tempnum
-                / Math.pow(10.0, Double.parseDouble(tle[1].substring(60, 61)));
+                / Math.pow(10.0, parseDouble(tle[1].substring(60, 61)));
 
         orbitnum = Integer.parseInt(StringUtils.strip(tle[2].substring(63, 68)));
 
@@ -210,6 +210,18 @@ public class TLE implements Serializable {
         /* Preprocess tle set */
 
         preProcessTLESet();
+    }
+    
+    private double parseDouble(String s) {
+    	
+    	double d = 0.0;
+    	try {
+    		d = Double.parseDouble(s);
+    	} catch (NumberFormatException e) {
+    		return 0.0d;
+    	}
+    	
+    	return d;
     }
 
     /**
