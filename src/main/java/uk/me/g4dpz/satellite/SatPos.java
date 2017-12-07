@@ -335,6 +335,29 @@ public class SatPos {
         eclipsed = other.eclipsed;
     }
 
+    /**
+     * 
+     * @param freq
+     * @return
+     */
+    public double getDopplerFrequency(double freq) {
+    	return calculateDopplerFrequency(freq);
+    }
+    
+    
+    /**
+     * Calculate the doppler frequency for 100MHz then scale to the downlink frequency
+     * 
+     * @param downlink
+     * @return
+     */
+    private double calculateDopplerFrequency(double downlink) {
+    	double doppler100=-100.0e06*((getRangeRate()*1000.0)/299792458.0);
+    	double dopp=1.0e-08*(doppler100*downlink);
+    	
+    	return dopp;
+    }
+    
     /*
      * Gets the range circle as an array of integers representing pairs of latitude and longitude.
      */

@@ -26,6 +26,7 @@
  */
 package uk.me.g4dpz.satellite;
 
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,13 +38,32 @@ import org.junit.Test;
 public final class SatPosTest {
 
     private static final String FORMAT_4F = "%4.0f %4.0f";
-
+    protected static final String[] AO85_TLE = {
+            "AO-85",
+            "1 40967U 15058D   17333.47991085  .00000229  00000-0  44518-4 0 01659",
+            "2 40967 064.7779 077.4197 0184716 018.3944 342.3672 14.75581611024180"};
+    
+    static final GroundStationPosition GROUND_STATION =
+            new GroundStationPosition(45.510948, -73.506672, 10);
+    private static final String FORMAT_9_7F = "%9.4f";
+    
 	/**
      * Default Constructor.
      */
     public SatPosTest() {
     }
 
+    @Test
+    public void dopplerCalc() {
+    	
+    	DateTime timeNow = new DateTime("2017-12-07T18:16:00Z");
+        final TLE tle = new TLE(AO85_TLE);
+        final Satellite satellite = SatelliteFactory.createSatellite(tle);
+        final SatPos satellitePosition = satellite.getPosition(GROUND_STATION, timeNow.toDate());
+        Assert.assertEquals("1724.2296", String.format(FORMAT_9_7F, satellitePosition.getDopplerFrequency(145980000)));
+        
+    }
+    
     @Test
     public void footprintCalculatedCorrectly() {
         final SatPos pos = new SatPos();
