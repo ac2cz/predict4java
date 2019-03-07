@@ -52,6 +52,7 @@ public class SatPos {
     /* WGS 84 Earth radius km */
     private static final double EARTH_RADIUS = 6.378137E3;
     private static final double R0 = 6378.16;
+    private static final double SPEED_OF_LIGHT_IN_VACUUM = 299792458.0;
 
     // the internal representation will be in radians
     private double azimuth;
@@ -250,7 +251,7 @@ public class SatPos {
     /**
      * @return the eclipseDepth
      */
-    protected final double getEclipseDepth() {
+    public final double getEclipseDepth() {
         return eclipseDepth;
     }
 
@@ -264,7 +265,7 @@ public class SatPos {
     /**
      * @return the eclipsed
      */
-    protected final boolean isEclipsed() {
+    public final boolean isEclipsed() {
         return eclipsed;
     }
 
@@ -344,17 +345,16 @@ public class SatPos {
     	return calculateDopplerFrequency(freq);
     }
     
-    
     /**
-     * Calculate the doppler frequency for 100MHz then scale to the downlink frequency
+     * Calculate the doppler frequency
+     * RangeRate is in km/s so we need to scale to meters.  
+     * Doppler is then the negative of the FREQ * rate of change / speed of light
      * 
      * @param downlink
      * @return
      */
     private double calculateDopplerFrequency(double downlink) {
-    	double doppler100=-100.0e06*((getRangeRate()*1000.0)/299792458.0);
-    	double dopp=1.0e-08*(doppler100*downlink);
-    	
+    	double dopp=-1 * downlink *((getRangeRate()*1000.0)/SPEED_OF_LIGHT_IN_VACUUM);
     	return dopp;
     }
     
